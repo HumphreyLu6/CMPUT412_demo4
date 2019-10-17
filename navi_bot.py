@@ -55,13 +55,17 @@ def joy_callback(msg):
 
     if msg.buttons[5] == 1:
         g_start = not g_start  
+    
+    print g_targets
 
 def main():
     global g_targets, g_start
     g_targets = []
     g_start = False
 
-    rospy.init_node('navi_bot')
+    rospy.init_node("navi_bot")
+
+    rospy.Subscriber("Joy", Joy, joy_callback)
 
     sm = smach.StateMachine(outcomes=['end'])
 
