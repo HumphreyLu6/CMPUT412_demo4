@@ -3,7 +3,7 @@
 import rospy, numpy, actionlib
 from sensor_msgs.msg import Joy
 from geometry_msgs.msg import Twist
-from move_base_msgs import MoveBaseAction, MoveBaseGoal
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 import time
 import smach
 import smach_ros
