@@ -66,7 +66,13 @@ class Navigate(smach.State):
     
     def get_waypoints(self):
         global g_targets
-        waypoints = [(2.1, 2.2, 0.0), (0.0, 0.0, 0.0, 1.0)]
+        init_waypoints = {'1':[(4.36114, -3.10110, 0.0), (0.0, 0.0, -0.48662, 0.87360)],
+                            '2':[(2.27855, -3.33638, 0.0), (0.0, 0.0, -0.99191, 0.12692)],
+                            '3':[(2.65019, -2.10509, 0.0), (0.0, 0.0, 0.12827, 0.99173)],
+                            '4':[(1.32160, -3.31259, 0.0), (0.0, 0.0, 0.99672, 0.08082)]}
+        waypoints = []
+        for item in g_targets:
+            waypoints.append(init_waypoints[str(item)])
         return waypoints
             
 def joy_callback(msg):
