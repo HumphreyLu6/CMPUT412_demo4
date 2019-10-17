@@ -16,7 +16,7 @@ class Wait(smach.State):
     
     def execute(self, userdata):
         global g_targets, g_start
-        if rospy.is_shutdown:
+        if rospy.is_shutdown():
             return 'end'
 
         if g_start == True:
@@ -38,14 +38,15 @@ class Navigate(smach.State):
     
     def execute(self, userdata):
         global g_start
-        if rospy.is_shutdown:
+        if rospy.is_shutdown():
             return 'end'
         else:
             waypoints = self.get_waypoints()
             for pose in waypoints:   
-                goal = goal_pose(pose)
-                client.send_goal(goal)
-                client.wait_for_result()
+                goal = self.goal_pose(pose)
+                self.client.send_goal(goal)
+                self.client.wait_for_result()
+            g_start = False
             return 'arrived'
     
     def goal_pose(self, pose): 
@@ -66,10 +67,10 @@ class Navigate(smach.State):
     
     def get_waypoints(self):
         global g_targets
-        init_waypoints = {'1':[(4.36114, -3.10110, 0.0), (0.0, 0.0, -0.48662, 0.87360)],
-                            '2':[(2.27855, -3.33638, 0.0), (0.0, 0.0, -0.99191, 0.12692)],
-                            '3':[(2.65019, -2.10509, 0.0), (0.0, 0.0, 0.12827, 0.99173)],
-                            '4':[(1.32160, -3.31259, 0.0), (0.0, 0.0, 0.99672, 0.08082)]}
+        init_waypoints = {'1':[(4.6114, -3.31259, 0.0), (0.0, 0.0, -0.48662, 0.87360)],
+                            '2':[(2.27855, -3.41259, 0.0), (0.0, 0.0, -0.99191, 0.12692)],
+                            '3':[(2.65019, -1.98509, 0.0), (0.0, 0.0, 0.12827, 0.99173)],
+                            '4':[(1.32160, -3.41259, 0.0), (0.0, 0.0, 0.99672, 0.08082)]}
         waypoints = []
         for item in g_targets:
             waypoints.append(init_waypoints[str(item)])
@@ -77,7 +78,7 @@ class Navigate(smach.State):
             
 def joy_callback(msg):
     global g_targets, g_start
-    if len(g_targets) <= 4:
+    if len(g_targets) < 4:
         if msg.buttons[0] == 1:
             g_targets.append(1)
         if msg.buttons[1] == 1:
@@ -101,7 +102,7 @@ def main():
 
     rospy.init_node("navi_bot")
 
-    rospy.Subscriber("Joy", Joy, joy_callback)
+    rospy.Subscriber("joy", Joy, joy_callback)
 
     sm = smach.StateMachine(outcomes=['end'])
 

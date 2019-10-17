@@ -1,8 +1,8 @@
 <launch>
     <include file="$(find turtlebot_bringup)/launch/minimal.launch"/>
+    <include file="$(find turtlebot_teleop)/launch/logitech.launch"/>
     <include file="$(find turtlebot_navigation)/launch/amcl_demo.launch">
-        <arg name="map_file" value = "/home/humphrey/Documents/catkin_ws/src/demo4/map.yaml"/>
-        <remap from="/base_scan" to="/scan"/>>
+        <arg name="map_file" value = "/home/hzhang/map.yaml"/>
     </include>
     <include file="$(find turtlebot_rviz_launchers)/launch/view_navigation.launch"/>
 
